@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express from 'express'
 import './database/connectdb'
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT !== undefined ? process.env.PORT : 5000
 
 const app = express()
 

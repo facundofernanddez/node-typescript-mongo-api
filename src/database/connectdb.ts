@@ -1,9 +1,10 @@
 import mongoose from 'mongoose'
 
-(async (): Promise<void> => {
+void (async () => {
   try {
-    const connection = await mongoose.connect(process.env.URI_DATABASE)
-    console.log('database connection in host: ' + connection.connection.host)
+    const db = await mongoose.connect(process.env.URI_DATABASE as string)
+
+    console.log('database connection in host: ' + db.connection.host + ' name: ' + db.connection.name)
   } catch (error) {
     console.log('error connecting to database', error)
   }
