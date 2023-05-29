@@ -6,6 +6,7 @@ import authRouter from './routes/auth.routes'
 const PORT = process.env.PORT !== undefined ? process.env.PORT : 5000
 
 const app = express()
+app.use(express.json())
 
 app.use('/api/v1', authRouter)
 
