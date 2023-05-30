@@ -2,3 +2,4 @@ node_modules
 build
 .env
 global.d.ts
+.vscode
