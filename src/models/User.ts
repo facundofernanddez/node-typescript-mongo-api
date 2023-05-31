@@ -1,9 +1,7 @@
-import mongoose from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
 import bcryptjs from 'bcryptjs'
 
-const { Schema, model } = mongoose
-
-const userSchema = new Schema(
+const userSchema: Schema<IUser> = new Schema(
   {
     email: {
       type: String,
@@ -36,5 +34,15 @@ userSchema.pre('save', async function (next) {
     throw new Error('fallo el hash de contraseña')
   }
 })
+
+userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
+  return await bcryptjs.compare(candidatePassword, this.password)
+}
+
+export interface IUser extends Document {
+  email: string
+  password: string
+  comparePassword: (candidatePassword: string) => Promise<boolean>
+}
 
 export const User = model('User', userSchema)
