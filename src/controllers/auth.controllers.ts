@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { User } from '../models/User'
+import jwt from 'jsonwebtoken'
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -20,11 +21,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Generar token con JWT
+
+    const SECRET_KEY: jwt.Secret = process.env.JWT_SECRET as jwt.Secret
+
+    const token = jwt.sign({ uid: user.id.toString() }, SECRET_KEY)
+
+    res.json({ token })
+    return
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'internal error' })
   }
-  res.json({ message: 'login' })
+  // res.json({ message: 'login' })
 }
 
 export const register = async (req: Request, res: Response): Promise<void> => {
