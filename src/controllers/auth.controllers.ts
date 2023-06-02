@@ -58,10 +58,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-export const infoUser = async (req: CustomRequest, _res: Response): Promise<void> => {
+export const infoUser = async (req: CustomRequest, res: Response): Promise<void> => {
   try {
-    const userId = req.payload
-    console.log(userId)
+    const payload = req.payload
+    if (payload.uid) { res.json({ payload }) }
     // const user = await User.findById()
     // res.json({ user })
   } catch (error) {
