@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken'
 
-/* interface IToken {
+interface IToken {
   token: string
   expiresIn: number
-} */
+}
 
-export const generateToken = (uid: string) => {
+export const generateToken = (uid: string): IToken | any => {
   const expiresIn = 60 * 15
 
   try {

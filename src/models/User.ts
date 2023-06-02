@@ -39,7 +39,7 @@ userSchema.methods.comparePassword = async function (candidatePassword: string):
   return await bcryptjs.compare(candidatePassword, this.password)
 }
 
-export interface IUser extends Document {
+interface IUser extends Document {
   email: string
   password: string
   comparePassword: (candidatePassword: string) => Promise<boolean>

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { User } from '../models/User'
 import { generateToken } from '../utils/tokenManager'
+import { CustomRequest } from '../middlewares/requireToken'
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -22,9 +23,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     // Generar token con JWT
 
-    const { token, expiresIn } = generateToken(user.id)
+    const token = generateToken(user.id)
 
-    res.json({ token, expiresIn })
+    res.json({ token: token.token, expire: token.expiresIn })
     return
   } catch (error) {
     console.log(error)
@@ -54,5 +55,16 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ error: 'user already exist' })
     }
     res.status(500).json({ error: 'internal server error' })
+  }
+}
+
+export const infoUser = async (req: CustomRequest, _res: Response): Promise<void> => {
+  try {
+    const userId = req.payload
+    console.log(userId)
+    // const user = await User.findById()
+    // res.json({ user })
+  } catch (error) {
+    console.log(error)
   }
 }
