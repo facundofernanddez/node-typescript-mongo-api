@@ -36,7 +36,7 @@ router.post(
 router.get(
   '/protected',
   requireToken as RequestHandler,
-  infoUser as RequestHandler
+  infoUser as unknown as RequestHandler
 )
 
 export default router
