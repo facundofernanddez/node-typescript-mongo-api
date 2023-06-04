@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import { infoUser, login, register } from '../controllers/auth.controllers'
+import { infoUser, login, refreshToken, register } from '../controllers/auth.controllers'
 import { body } from 'express-validator'
 import { validationResultMid } from '../middlewares/validationResultsMid'
 import { requireToken } from '../middlewares/requireToken'
@@ -35,8 +35,12 @@ router.post(
 
 router.get(
   '/protected',
-  requireToken as RequestHandler,
-  infoUser as unknown as RequestHandler
+  [requireToken, infoUser] as unknown as RequestHandler
+)
+
+router.get(
+  '/refresh',
+  refreshToken as RequestHandler
 )
 
 export default router

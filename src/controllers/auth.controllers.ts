@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
 import { User } from '../models/User'
-import { generateToken } from '../utils/tokenManager'
+import { generateRefreshToken, generateToken } from '../utils/tokenManager'
 import { CustomRequest } from '../middlewares/requireToken'
+import jwt from 'jsonwebtoken'
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -24,14 +25,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     // Generar token con JWT
 
     const token = generateToken(user.id)
+    await generateRefreshToken(user.id, res)
 
     res.json({ token: token.token, expire: token.expiresIn })
-    return
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'internal error' })
   }
-  // res.json({ message: 'login' })
 }
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -67,5 +67,25 @@ export const infoUser = async (req: CustomRequest, res: Response): Promise<void>
     }
   } catch (error) {
     console.log(error)
+  }
+}
+
+export const refreshToken = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const refreshTokenFromCookie = await req.cookies.refresh_token
+
+    if (refreshTokenFromCookie === null) throw new Error('no existe refresh token')
+
+    const payload = jwt.verify(
+      refreshTokenFromCookie,
+      process.env.JWT_REFRESH_TOKEN as jwt.Secret
+    )
+
+    const token = generateToken((payload as { uid: string }).uid)
+
+    res.json({ token: token.token, expires: token.expiresIn })
+  } catch (error) {
+    console.log(error)
+    res.status(401).json({ error })
   }
 }
