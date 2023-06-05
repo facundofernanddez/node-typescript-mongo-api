@@ -14,7 +14,7 @@ export const validationResultMid = async (
   next()
 }
 
-export const bodyLoginValidator = [
+export const bodyValidator = [
   body('email', 'Incorrect email')
     .trim()
     .isEmail()
