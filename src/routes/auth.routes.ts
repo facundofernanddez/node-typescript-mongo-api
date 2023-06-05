@@ -40,7 +40,7 @@ router.get(
 
 router.get(
   '/refresh',
-  refreshToken as RequestHandler
+  refreshToken as unknown as RequestHandler
 )
 
 router.get('/logout', logout as RequestHandler)

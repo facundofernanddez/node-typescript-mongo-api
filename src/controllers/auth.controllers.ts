@@ -1,8 +1,7 @@
 import { Request, Response } from 'express'
 import { User } from '../models/User'
 import { generateRefreshToken, generateToken } from '../utils/tokenManager'
-import { CustomRequest } from '../middlewares/requireToken'
-import jwt from 'jsonwebtoken'
+import { CustomRequest } from '../types/customRequest'
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -70,18 +69,9 @@ export const infoUser = async (req: CustomRequest, res: Response): Promise<void>
   }
 }
 
-export const refreshToken = async (req: Request, res: Response): Promise<void> => {
+export const refreshToken = async (req: CustomRequest, res: Response): Promise<void> => {
   try {
-    const refreshTokenFromCookie = await req.cookies.refresh_token
-
-    if (refreshTokenFromCookie === null) throw new Error('no existe refresh token')
-
-    const payload = jwt.verify(
-      refreshTokenFromCookie,
-      process.env.JWT_REFRESH_TOKEN as jwt.Secret
-    )
-
-    const token = generateToken((payload as { uid: string }).uid)
+    const token = generateToken(req.uid)
 
     res.json({ token: token.token, expires: token.expiresIn })
   } catch (error) {
