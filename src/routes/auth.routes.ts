@@ -1,37 +1,18 @@
 import { RequestHandler, Router } from 'express'
 import { infoUser, login, logout, refreshToken, register } from '../controllers/auth.controllers'
-import { body } from 'express-validator'
-import { validationResultMid } from '../middlewares/validationResultsMid'
 import { requireToken } from '../middlewares/requireToken'
+import { requireRefreshToken } from '../middlewares/requireRefreshToken'
+import { bodyValidator } from '../middlewares/validatorManager'
 
 const router = Router()
 
 router.post('/login',
-  [
-    body('email', 'Incorrect email')
-      .trim()
-      .isEmail()
-      .normalizeEmail(),
-    body('password', 'incorrect password')
-      .trim()
-      .isLength({ min: 6 })
-  ],
-  validationResultMid as RequestHandler,
-  login as RequestHandler)
+  [bodyValidator, login] as unknown as RequestHandler
+)
 
 router.post(
   '/register',
-  [
-    body('email', 'Incorrect email')
-      .trim()
-      .isEmail()
-      .normalizeEmail(),
-    body('password', 'incorrect password')
-      .trim()
-      .isLength({ min: 6 })
-  ],
-  validationResultMid as RequestHandler,
-  register as RequestHandler)
+  [bodyValidator, register] as unknown as RequestHandler)
 
 router.get(
   '/protected',
@@ -40,7 +21,7 @@ router.get(
 
 router.get(
   '/refresh',
-  refreshToken as unknown as RequestHandler
+  [requireRefreshToken, refreshToken] as unknown as RequestHandler
 )
 
 router.get('/logout', logout as RequestHandler)
