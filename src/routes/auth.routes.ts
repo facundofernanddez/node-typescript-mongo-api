@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express'
-import { infoUser, login, refreshToken, register } from '../controllers/auth.controllers'
+import { infoUser, login, logout, refreshToken, register } from '../controllers/auth.controllers'
 import { body } from 'express-validator'
 import { validationResultMid } from '../middlewares/validationResultsMid'
 import { requireToken } from '../middlewares/requireToken'
@@ -42,5 +42,7 @@ router.get(
   '/refresh',
   refreshToken as RequestHandler
 )
+
+router.get('/logout', logout as RequestHandler)
 
 export default router

@@ -89,3 +89,8 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
     res.status(401).json({ error })
   }
 }
+
+export const logout = (_req: Request, res: Response): void => {
+  res.clearCookie('refresh_token')
+  res.status(200).json({ ok: true })
+}
