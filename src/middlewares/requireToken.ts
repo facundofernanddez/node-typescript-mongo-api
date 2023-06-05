@@ -1,21 +1,18 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response } from 'express'
 import jwt from 'jsonwebtoken'
-
-export interface CustomRequest extends Request {
-  uid: string
-}
+import { CustomRequest } from '../types/customRequest'
 
 export const requireToken = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '')
 
-    const payload = jwt.verify(token as string, process.env.JWT_SECRET as jwt.Secret);
+    const payload = jwt.verify(token as string, process.env.JWT_SECRET as jwt.Secret)
 
-    (req as CustomRequest).uid = (payload as { uid: string }).uid
+    req.uid = (payload as { uid: string }).uid
 
     next()
   } catch (error) {
