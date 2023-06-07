@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Link } from '../models/Link'
 import { CustomRequest } from '../types/customRequest'
+import { nanoid } from 'nanoid'
 
 export const getLinks = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -19,7 +20,11 @@ export const createLink = async (req: Request, res: Response): Promise<void> => 
 
     const { longLink } = req.body
 
-    res.json({ longLink })
+    const link = new Link({ longLink, nanoLink: nanoid(6), uid: (req as CustomRequest).uid })
+
+    const newLink = await link.save()
+
+    res.json({ newLink })
   } catch (error: any) {
     console.log(error)
     res.status(500).json({ error: error.message })
