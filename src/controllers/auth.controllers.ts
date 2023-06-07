@@ -46,7 +46,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     // jwt token
 
-    res.status(201).json({ message: 'success' })
+    const token = generateToken(user.id)
+    await generateRefreshToken(user.id, res)
+
+    res.status(201).json({ token: token.token, expire: token.expiresIn })
     return
   } catch (error: any) {
     console.log(error.code)
