@@ -24,7 +24,7 @@ export const createLink = async (req: Request, res: Response): Promise<void> => 
 
     const newLink = await link.save()
 
-    res.json({ newLink })
+    res.status(201).json({ newLink })
   } catch (error: any) {
     console.log(error)
     res.status(500).json({ error: error.message })
