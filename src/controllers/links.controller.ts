@@ -18,7 +18,10 @@ export const createLink = async (req: Request, res: Response): Promise<void> => 
   try {
     // const links = await Link.find({ uid: (req as CustomRequest).uid })
 
-    const { longLink } = req.body
+    let { longLink } = req.body
+    if (!longLink.startsWith('https://')) {
+      longLink = 'https://' + longLink
+    }
 
     const link = new Link({ longLink, nanoLink: nanoid(6), uid: (req as CustomRequest).uid })
 

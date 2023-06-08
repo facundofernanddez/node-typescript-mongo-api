@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { NextFunction, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 
@@ -13,6 +14,27 @@ export const validationResultMid = async (
 
   next()
 }
+
+export const bodyLinkValidator = [
+  body('longLink', 'incorrect or invalid link')
+    .trim()
+    .notEmpty()
+    .exists()
+    .custom(async value => {
+      try {
+        if (!value.startsWith('https://')) {
+          value = 'https://' + value
+        }
+
+        await axios.get(value)
+        return value
+      } catch (error) {
+        // console.log(error)
+        throw new Error('Not found')
+      }
+    }),
+  validationResultMid
+]
 
 export const bodyValidator = [
   body('email', 'Incorrect email')
