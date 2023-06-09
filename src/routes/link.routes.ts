@@ -1,7 +1,7 @@
 import { RequestHandler, Router } from 'express'
 import { createLink, getLinks, getOneLink, removeLink } from '../controllers/links.controller'
 import { requireToken } from '../middlewares/requireToken'
-import { bodyLinkValidator } from '../middlewares/validatorManager'
+import { bodyLinkValidator, paramLinkValidator } from '../middlewares/validatorManager'
 
 const router = Router()
 
@@ -14,6 +14,6 @@ const router = Router()
 router.get('/', [requireToken, getLinks] as unknown as RequestHandler)
 router.get('/:id', [requireToken, getOneLink])
 router.post('/', [requireToken, bodyLinkValidator, createLink] as unknown as RequestHandler)
-router.delete('/:id', [requireToken, removeLink])
+router.delete('/:id', [requireToken, paramLinkValidator, removeLink] as unknown as RequestHandler)
 
 export default router
