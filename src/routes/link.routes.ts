@@ -19,7 +19,7 @@ const router = Router()
 
 router.get('/', [requireToken, getLinks] as unknown as RequestHandler)
 
-router.get('/:id', [requireToken, getOneLink])
+router.get('/:nanoLink', [getOneLink])
 
 router.post('/', [requireToken, bodyLinkValidator, createLink] as unknown as RequestHandler)
 

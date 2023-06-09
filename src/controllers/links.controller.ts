@@ -16,20 +16,15 @@ export const getLinks = async (req: Request, res: Response): Promise<void> => {
 
 export const getOneLink = async (req: Request, res: Response): Promise<void> => {
   try {
-    const id = req.params.id
-    const link = await Link.findById(id)
+    const nanoLink = req.params.nanoLink
+    const link = await Link.findOne({ nanoLink })
 
     if (link === null) {
       res.status(404).json({ error: 'link not found' })
       return
     }
 
-    if (link?.uid?.equals((req as CustomRequest).uid) === false) {
-      res.status(401).json({ error: 'No le pertenece ese link 🤡' })
-      return
-    }
-
-    res.json({ link })
+    res.json({ longLink: link.longLink })
   } catch (error: any) {
     console.log(error)
     res.status(500).json({ error: error.message })
