@@ -76,6 +76,43 @@ export const removeLink = async (req: Request, res: Response): Promise<void> => 
     res.json({ link })
   } catch (error: any) {
     console.log(error)
+    if (error.kind === 'ObjectId') {
+      res.status(403).json({ error: 'Formato id incorrecto' })
+    }
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const updateLink = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const id = req.params.id
+    let { longLink } = req.body
+    console.log(longLink)
+    if (!longLink?.startsWith('https://')) {
+      longLink = 'https://' + longLink
+    }
+    const link = await Link.findById(id)
+
+    if (link === null) {
+      res.status(404).json({ error: 'link does not exist' })
+      return
+    }
+
+    if (link?.uid?.equals((req as CustomRequest).uid) === false) {
+      res.status(401).json({ error: 'No le pertenece ese link 🤡' })
+      return
+    }
+
+    // update
+    link.longLink = longLink
+    await link.save()
+
+    res.json({ link })
+  } catch (error: any) {
+    console.log(error)
+    if (error.kind === 'ObjectId') {
+      res.status(403).json({ error: 'Formato id incorrecto' })
+    }
     res.status(500).json({ error: error.message })
   }
 }
