@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { NextFunction, Request, Response } from 'express'
-import { body, validationResult } from 'express-validator'
+import { body, param, validationResult } from 'express-validator'
 
 export const validationResultMid = async (
   req: Request,
@@ -14,6 +14,14 @@ export const validationResultMid = async (
 
   next()
 }
+
+export const paramLinkValidator = [
+  param('id', 'formato no valido (express validator)')
+    .trim()
+    .notEmpty()
+    .escape(),
+  validationResultMid
+]
 
 export const bodyLinkValidator = [
   body('longLink', 'incorrect or invalid link')
@@ -29,7 +37,6 @@ export const bodyLinkValidator = [
         await axios.get(value)
         return value
       } catch (error) {
-        // console.log(error)
         throw new Error('Not found')
       }
     }),
