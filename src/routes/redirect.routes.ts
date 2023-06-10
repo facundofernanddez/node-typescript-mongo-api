@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { redirectLink } from '../controllers/redirectLink'
+import { redirectLink } from '../controllers/redirect.controller'
 
 const router = Router()
 
