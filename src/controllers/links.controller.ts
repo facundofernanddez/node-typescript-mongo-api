@@ -27,7 +27,7 @@ export const getOneLink = async (req: Request, res: Response): Promise<void> => 
     res.json({ longLink: link.longLink })
   } catch (error: any) {
     if (error.kind === 'ObjectId') {
-      res.status(403).json({ error: 'Formato id incorrecto' })
+      res.status(403).json({ error: 'incorrect id format' })
     }
     console.log(error)
     res.status(500).json({ error: error.message })

@@ -12,11 +12,20 @@ const app = express()
 
 const whiteList = [process.env.ORIGIN1] as string[]
 
-const options: cors.CorsOptions = {
+/* const options: cors.CorsOptions = {
   origin: whiteList
-}
+} */
 
-app.use(cors(options))
+app.use(
+  cors({
+    origin (requestOrigin, callback) {
+      if (whiteList.includes(requestOrigin as string)) {
+        return callback(null, requestOrigin)
+      }
+      return callback(Error(`Invalid request origin ${requestOrigin as string} not allowed`))
+    }
+  })
+)
 
 app.use(express.json())
 app.use(cookieParser())
