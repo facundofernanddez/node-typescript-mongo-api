@@ -5,6 +5,7 @@ import { CustomRequest } from '../types/customRequest'
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log('entro')
     const { email, password } = req.body
 
     const user = await User.findOne({ email })

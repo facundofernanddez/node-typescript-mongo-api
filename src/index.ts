@@ -27,10 +27,14 @@ app.use(
   })
 )
 
+// app.use(cors())
+
 app.use(express.json())
 app.use(cookieParser())
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/links', linkRouter)
 
-app.listen(PORT, () => { console.log(`server listening on port ${PORT}`) })
+app.listen(PORT, () => {
+  console.log(`server listening on port ${PORT} origin ${process.env.ORIGIN1}`)
+})
